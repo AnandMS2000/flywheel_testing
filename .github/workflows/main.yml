@@ -1,0 +1,19 @@
+name: Flywheel SSH Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_PORT: '22 -o PubkeyAcceptedKeyTypes=+ssh-rsa'
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          ARGS: -rltgoDzvO
+          EXCLUDE: "/.git, /.github, /README.md, /.DS_Store, /node_modules/"
+          TARGET: '/www/wp-content/themes/'
